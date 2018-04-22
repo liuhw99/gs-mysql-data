@@ -1,0 +1,19 @@
+spring:
+  datasource:  
+    url : jdbc:mysql://${mysql.host}:3306/db_example?useSSL=false
+    username : ${mysql.user}  
+    password : ${mysql.password}
+    platform: mysql
+    initialization-mode: always
+    
+logging:
+  level:
+    org.springframework.cloud.consul: DEBUG    
+    
+---
+spring:
+  profiles: localdev 
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_example?useSSL=false
+    username: springuser
+    password: welcome1

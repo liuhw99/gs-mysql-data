@@ -1,0 +1,47 @@
+version: '3'
+services:
+  mysqldb2:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: welcome1
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-volume:/var/lib/mysql
+      
+  consul1:
+    image: consul:latest
+    hostname: "consul1"
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:8600"
+    command: "agent -server -bootstrap-expect 3 -ui -disable-host-node-id -client 0.0.0.0"
+  consul2:
+    image: consul:latest
+    hostname: "consul2"
+    command: "agent -server -join consul1 -disable-host-node-id"
+    depends_on: 
+      - consul1
+  consul3:
+    image: consul:latest
+    hostname: "consul3"
+    command: "agent -server -join consul1 -disable-host-node-id"
+    depends_on:
+      - consul1
+    volumes:
+      - consul-volume:/consul/data
+
+  mysql-webapp:
+    image: liuhu/gs-mysql-data
+    depends_on:
+      - consul1
+      - consul2
+      - consul3
+      - mysqldb2
+    ports:
+      - 8080:8080
+      
+volumes:
+  mysql-volume:   
+  consul-volume:

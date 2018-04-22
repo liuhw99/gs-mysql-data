@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: mysqlApp1
+  cloud:
+    consul:
+      host: consul1       
+      enabled: true
+      config:
+        enabled: true
+#        prefix: dev
